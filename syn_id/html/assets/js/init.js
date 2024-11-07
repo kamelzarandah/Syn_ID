@@ -23,7 +23,7 @@ $(document).ready(function(){
 
         $('#name').text(userData.name);
         $('#dob').text(userData.job);
-        $('#height').text(jobgrade);
+        $('#height').text(userData.jobgrade);
         $('#signature').text(userData.name);
         $('#id-card').css('background', 'url(assets/images/idcard.png)');
         
