@@ -1,58 +1,48 @@
 local open = false
 local playerid = 0
 local tgt = 0
-local sex
+local sexs
 local showing = false
 RegisterNetEvent('syn_id:open')
-AddEventHandler('syn_id:open', function( data, type )
+AddEventHandler('syn_id:open', function( data, type,sex,playerid )
+	showing = true
+	sexs = sex
 	SendNUIMessage({
 		action = "open",
+		id = playerid,
 		array  = data,
 		type   = type,
-		sex = sex
+		sex = sexs
 	})
 end)
+RegisterNUICallback('close', function(data)
+	showing = false
+end)
 
-RegisterCommand("id",function()
+
+RegisterCommand("idcard",function()
 	if not showing then
-		local player = PlayerPedId()
-		local male = IsPedMale(player)
-		if male then 
-			sex = 'm'
-		else 
-			sex = 'f'
-		end		
+	
         local closestPlayer, closestDistance, playerid, tgt1 = GetClosestPlayer()
 		if closestPlayer ~= -1 and closestDistance <= 2.0  then
-			TriggerServerEvent("syn_id:open",playerid)
-		else
-			TriggerServerEvent("syn_id:open")
+			if playerid ~= GetPlayerServerId(GetPlayerIndex()) then 
+				TriggerServerEvent("syn_id:open",playerid)
+			end
 		end
-		showing = true
-	else
-		SendNUIMessage({
-			action = "close"
-		})
-		showing = false
 	end
-end)
+end,false)
 
 RegisterCommand("takeid",function()
 	if not showing then
-		local player = PlayerPedId()
         local closestPlayer, closestDistance, playerid, tgt1 = GetClosestPlayer()
-		if closestPlayer ~= -1 and closestDistance <= 2.0  then
-			local male = IsPedMale(tgt1)
-			if male then 
-				sex = 'm'
-			else 
-				sex = 'f'
-			end				
+		if closestPlayer ~= -1 and closestDistance <= 2.0  then			
 			local hogtied =  Citizen.InvokeNative(0x3AA24CCC0D451379, tgt1)
             local handcuffed = Citizen.InvokeNative(0x74E559B3BC910685, tgt1)
 			local isDead = IsEntityDead(tgt1)
+			local targgt = GetPlayerServerId()
+
 			if hogtied or handcuffed or isDead then 
-				TriggerServerEvent("syn_id:open2",playerid)
+				TriggerServerEvent("syn_id:open2",targgt)
 			else
 				TriggerEvent("vorp:TipBottom", "Target is not restrained", 4000)
 			end
@@ -64,7 +54,7 @@ RegisterCommand("takeid",function()
 		})
 		showing = false
 	end
-end)
+end,false)
 
 function GetClosestPlayer()
     local players, closestDistance, closestPlayer = GetActivePlayers(), -1, -1
