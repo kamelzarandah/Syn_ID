@@ -9,10 +9,12 @@ VorpInv = exports.vorp_inventory:vorp_inventoryApi()
 -- Open ID card
 RegisterServerEvent('syn_id:open')
 AddEventHandler('syn_id:open', function(playerid)
+	print(playerid)
 	local Character = VorpCore.getUser(source).getUsedCharacter
 	local job = Character.job
 	local jobgrade = Character.jobGrade
 	local name = Character.firstname .. ' ' .. Character.lastname
+	local sex = Character.gender
 	local type = 'id'
 	local array = {}
 	 array = {
@@ -21,10 +23,8 @@ AddEventHandler('syn_id:open', function(playerid)
 		jobgrade = jobgrade
 	}
 	if playerid ~= nil then
-		TriggerClientEvent('syn_id:open', playerid, array, type)
-		TriggerClientEvent('syn_id:open', source, array, type)
-	else
-		TriggerClientEvent('syn_id:open', source, array, type)
+		TriggerClientEvent('syn_id:open', playerid, array, type,sex,source)
+		TriggerClientEvent('syn_id:open', source, array, type,sex,source)
 	end
 end)
 
@@ -34,6 +34,7 @@ AddEventHandler('syn_id:open2', function(playerid)
 	local job = Character.job
 	local jobgrade = Character.jobGrade
 	local name = Character.firstname .. ' ' .. Character.lastname
+	local sex = Character.gender
 	local type = 'id'
 	local array = {}
 	 array = {
@@ -41,5 +42,5 @@ AddEventHandler('syn_id:open2', function(playerid)
 		job = job,
 		jobgrade = jobgrade
 	}
-		TriggerClientEvent('syn_id:open', source, array, type)
+		TriggerClientEvent('syn_id:open', source, array, type,sex,playerid)
 end)
