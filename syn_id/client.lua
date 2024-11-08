@@ -39,10 +39,8 @@ RegisterCommand("takeid",function()
 			local hogtied =  Citizen.InvokeNative(0x3AA24CCC0D451379, tgt1)
             local handcuffed = Citizen.InvokeNative(0x74E559B3BC910685, tgt1)
 			local isDead = IsEntityDead(tgt1)
-			local targgt = GetPlayerServerId()
-
 			if hogtied or handcuffed or isDead then 
-				TriggerServerEvent("syn_id:open2",targgt)
+				TriggerServerEvent("syn_id:open2",playerid)
 			else
 				TriggerEvent("vorp:TipBottom", "Target is not restrained", 4000)
 			end
